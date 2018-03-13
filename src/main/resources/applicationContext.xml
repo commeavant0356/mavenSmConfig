@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 扫描com.bdqn包下的所有类 -->
+    <context:component-scan base-package="com.bdqn.*"/>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 驱动 -->
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <!-- 连接字符串 -->
+        <property name="jdbcUrl" value="jdbc:mysql://120.79.87.228:3306/xsh"/>
+        <!-- 用户名 -->
+        <property name="user" value="root"/>
+        <!-- 密码 -->
+        <property name="password" value="accp"/>
+
+
+    </bean>
+
+    <!-- 配置sqlSession工厂 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--<property name="configLocation" value="classpath:mybatis-configuration.xml"/>-->
+        <!-- 指定映射文件所在的位置 -->
+        <property name="mapperLocations" value="classpath:com/bdqn/mapping/*Mapper.xml" />
+        <property name="typeAliasesPackage" value="com.bdqn.pojo"/>
+    </bean>
+
+    <!-- 指定Dao接口所在的包	spring会自动查找其包下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <!-- dao接口所在的包 -->
+        <property name="basePackage" value="com.bdqn.dao"/>
+    </bean>
+
+</beans>
